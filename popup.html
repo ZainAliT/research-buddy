@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Research Buddy - Note Exporter</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      width: 360px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f8fafc;
+      color: #1e293b;
+      display: flex;
+      flex-direction: column;
+      min-height: 420px;
+      max-height: 520px;
+    }
+
+    /* Header */
+    .header {
+      background: #1e3a8a;
+      color: #ffffff;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #fbbf24;
+    }
+
+    .header-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-count {
+      background-color: #fbbf24;
+      color: #1e3a8a;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 12px;
+    }
+
+    /* Subheader with Page Info */
+    .page-info {
+      padding: 10px 16px;
+      background-color: #f1f5f9;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .page-title {
+      font-size: 11px;
+      color: #475569;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 250px;
+    }
+
+    .btn-clear {
+      background: none;
+      border: none;
+      color: #ef4444;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .btn-clear:hover {
+      color: #b91c1c;
+    }
+
+    /* Main Content Area */
+    .content-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 16px;
+    }
+
+    /* Highlight Card */
+    .highlight-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #fbbf24;
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      position: relative;
+    }
+
+    .highlight-text {
+      font-size: 12px;
+      line-height: 1.5;
+      color: #334155;
+      margin-bottom: 6px;
+      word-break: break-word;
+    }
+
+    .highlight-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: #94a3b8;
+      border-top: 1px dashed #f1f5f9;
+      padding-top: 5px;
+    }
+
+    .btn-delete-item {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 13px;
+      line-height: 1;
+      padding: 2px 4px;
+      border-radius: 3px;
+      transition: color 0.15s, background-color 0.15s;
+    }
+
+    .btn-delete-item:hover {
+      color: #ef4444;
+      background-color: #fee2e2;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 40px 16px;
+      color: #64748b;
+    }
+
+    .empty-state-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .empty-state-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 4px;
+    }
+
+    .empty-state-desc {
+      font-size: 11px;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+
+    /* Footer & Actions */
+    .footer {
+      padding: 12px 16px;
+      background-color: #ffffff;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .export-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background-color: #1e3a8a;
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background-color: #172554;
+    }
+
+    .btn-secondary {
+      background-color: #f1f5f9;
+      color: #1e293b;
+      border-color: #cbd5e1;
+    }
+
+    .btn-secondary:hover {
+      background-color: #e2e8f0;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Status Toast */
+    .status-toast {
+      display: none;
+      font-size: 11px;
+      text-align: center;
+      padding: 6px;
+      background-color: #ecfdf5;
+      color: #065f46;
+      border-top: 1px solid #a7f3d0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="header-title">
+      <span>✏️ Research Buddy</span>
+    </div>
+    <span id="badge-count" class="badge-count">0 Notes</span>
+  </div>
+
+  <!-- Page Info Bar -->
+  <div class="page-info">
+    <span id="page-title" class="page-title" title="Current Webpage">Loading active tab...</span>
+    <button id="btn-clear-all" class="btn-clear" style="display: none;">Clear All</button>
+  </div>
+
+  <!-- Highlights Container -->
+  <div id="content-area" class="content-area">
+    <div id="empty-state" class="empty-state">
+      <div class="empty-state-icon">📝</div>
+      <div class="empty-state-title">No highlights on this page</div>
+      <div class="empty-state-desc">Select any text on the webpage to automatically create a permanent highlight.</div>
+    </div>
+    <div id="highlights-list"></div>
+  </div>
+
+  <!-- Footer with Export Buttons -->
+  <div class="footer">
+    <div class="export-label">Export Notes</div>
+    <div class="btn-group">
+      <button id="btn-export-txt" class="btn btn-secondary" disabled>📄 Export .TXT</button>
+      <button id="btn-export-md" class="btn btn-primary" disabled>📑 Export .MD</button>
+    </div>
+  </div>
+
+  <!-- Feedback Toast -->
+  <div id="status-toast" class="status-toast"></div>
+
+  <!-- Popup Script -->
+  <script src="popup.js"></script>
+</body>
+</html>

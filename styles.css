@@ -1,0 +1,21 @@
+/* ==============================================================================
+   Research Buddy - Web Highlighter Styles (Injected into Webpages)
+   ============================================================================== */
+
+.rb-highlight-span {
+  background-color: #ffeb3b !important;
+  color: #1a1a1a !important;
+  padding: 1px 3px !important;
+  border-radius: 3px !important;
+  border-bottom: 2px solid #fbc02d !important;
+  font-weight: 500;
+  display: inline !important;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rb-highlight-span:hover {
+  background-color: #ffd54f !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15) !important;
+}
